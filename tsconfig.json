@@ -8,7 +8,8 @@
         "moduleResolution": "node",
         "outDir": "build",
         "noImplicitAny": false,
-        "inlineSourceMap": true,
+        "sourceMap": true,
+        "allowJs": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true
     }
