@@ -4,18 +4,10 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-import { ANTLRInputStream, CommonTokenStream, Token, ParserRuleContext } from 'antlr4ts';
-import {
-  SOQLParser,
-  From_clauseContext,
-  Select_clauseContext,
-  Soql_queryContext,
-  Where_clauseContext,
-} from '../generated/SOQLParser';
-import { SOQLLexer } from '../generated//SOQLLexer';
+import { ANTLRInputStream, CommonTokenStream } from 'antlr4ts';
+import { Soql_queryContext, SOQLParser } from '../generated/SOQLParser';
+import { SOQLLexer } from '../generated/SOQLLexer';
 import { ParseTreeWalker } from 'antlr4ts/tree';
-import { ParseTree } from 'antlr4ts/tree/ParseTree';
-import { TerminalNode } from 'antlr4ts/tree/TerminalNode';
 import { Listener } from './SoqlListener';
 import { SoqlQuery } from './models/SoqlQuery.model';
 import { SyntaxErrorListener } from './ErrorListener';
@@ -39,8 +31,8 @@ function configureDefaults(config: Partial<SoqlQueryConfig> = {}) {
 
 /**
  * @description Returns the ANTLR SOQL parser
- * @param {soql} String SOQL query
- * @param {SoqlQueryConfig} SoqlQueryConfig optional configuration
+ * @param {soql} soql String SOQL query
+ * @param {SoqlQueryConfig} config SoqlQueryConfig optional configuration
  * @returns SOQLParser
  */
 export function getSoqlQueryContext(soql: string, config: Partial<SoqlQueryConfig> = {}): SOQLParser {
@@ -59,8 +51,8 @@ export function getSoqlQueryContext(soql: string, config: Partial<SoqlQueryConfi
 
 /**
  * @description For a given soql query, parse the query and return a parsed SoqlQuery object
- * @param {soql} String SOQL query
- * @param {SoqlQueryConfig} SoqlQueryConfig optional configuration
+ * @param {string} soql String SOQL query
+ * @param {SoqlQueryConfig} config SoqlQueryConfig optional configuration
  * @returns SoqlQuery
  */
 export function parseQuery(soql: string, config: Partial<SoqlQueryConfig> = {}): SoqlQuery {
