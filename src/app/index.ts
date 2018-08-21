@@ -73,7 +73,15 @@ const queries = [
   `SELECT UserId, LoginTime from LoginHistory`,
   `SELECT UserId, COUNT(Id) from LoginHistory WHERE LoginTime > 2010-09-20T22:16:30.000Z AND LoginTime < 2010-09-21T22:16:30.000Z GROUP BY UserId`,
   `SELECT Id, Name, IsActive, SobjectType, DeveloperName, Description FROM RecordType`,
+  `SELECT CampaignId, AVG(Amount) avg FROM Opportunity GROUP BY CampaignId HAVING COUNT(Id, Name) > 1`,
+  `SELECT LeadSource, COUNT(Name) cnt FROM Lead GROUP BY ROLLUP(LeadSource)`,
+  `SELECT Status, LeadSource, COUNT(Name) cnt FROM Lead GROUP BY ROLLUP(Status, LeadSource)`,
+  `SELECT Type, BillingCountry, GROUPING(Type) grpType, GROUPING(BillingCountry) grpCty, COUNT(id) accts FROM Account GROUP BY CUBE(Type, BillingCountry) ORDER BY GROUPING(Type), GROUPING(Id, BillingCountry), Name DESC NULLS FIRST, Id ASC NULLS LAST`,
+  `SELECT c.Name, c.Account.Name FROM Contact c`,
 ];
+
+// const query = parseQuery(queries[30], { logging: true });
+// console.log(JSON.stringify(query, null, 2));
 
 const output = [];
 queries.forEach((soql, i) => {

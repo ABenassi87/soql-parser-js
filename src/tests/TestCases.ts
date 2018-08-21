@@ -1,7 +1,14 @@
+import { Query } from '../app/models/SoqlQuery.model';
+
 // Queries obtained from SFDC examples
 // https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_examples.htm
+interface TestCase {
+  testCase: number;
+  soql: string;
+  output: Query;
+}
 
-export default [
+const testCases: TestCase[] = [
   {
     testCase: 1,
     soql: 'SELECT Id, Name, BillingCity FROM Account',
@@ -19,7 +26,7 @@ export default [
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Account',
+      sObject: 'Account',
     },
   },
   {
@@ -46,7 +53,7 @@ export default [
           },
         ],
       ],
-      name: 'Contact',
+      sObject: 'Contact',
     },
   },
   {
@@ -60,7 +67,7 @@ export default [
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Account',
+      sObject: 'Account',
       orderBy: {
         field: 'Name',
         order: 'DESC',
@@ -87,7 +94,7 @@ export default [
           },
         ],
       ],
-      name: 'Account',
+      sObject: 'Account',
       limit: 125,
     },
   },
@@ -110,7 +117,7 @@ export default [
           },
         ],
       ],
-      name: 'Account',
+      sObject: 'Account',
       orderBy: {
         field: 'BillingPostalCode',
         order: 'ASC',
@@ -126,14 +133,14 @@ export default [
       fields: [
         {
           fn: {
-            fnType: 'aggregate',
+            text: 'COUNT()',
             name: 'COUNT',
           },
         },
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Contact',
+      sObject: 'Contact',
     },
   },
   {
@@ -146,16 +153,18 @@ export default [
         },
         {
           fn: {
-            fnType: 'aggregate',
+            text: 'COUNT(Name)',
             name: 'COUNT',
-            value: 'Name',
+            parameter: 'Name',
           },
         },
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Lead',
-      groupBy: 'LeadSource',
+      sObject: 'Lead',
+      groupBy: {
+        field: 'LeadSource',
+      },
     },
   },
   {
@@ -168,20 +177,26 @@ export default [
         },
         {
           fn: {
-            fnType: 'aggregate',
+            text: 'COUNT(Id)',
             name: 'COUNT',
-            value: 'Id',
+            parameter: 'Id',
           },
         },
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Account',
-      groupBy: 'Name',
+      sObject: 'Account',
+      groupBy: {
+        field: 'Name',
+      },
       having: {
-        fnType: 'aggregate',
-        name: 'COUNT',
-        value: 'Id',
+        fn: {
+          text: 'COUNT(Id)',
+          name: 'COUNT',
+          parameter: 'Id',
+        },
+        operator: '>',
+        value: '1',
       },
     },
   },
@@ -199,7 +214,7 @@ export default [
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Merchandise__c',
+      sObject: 'Merchandise__c',
       orderBy: {
         field: 'Name',
       },
@@ -220,7 +235,7 @@ export default [
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Merchandise__c',
+      sObject: 'Merchandise__c',
       orderBy: {
         field: 'Name',
       },
@@ -244,7 +259,7 @@ export default [
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Contact',
+      sObject: 'Contact',
     },
   },
   {
@@ -273,7 +288,7 @@ export default [
           },
         ],
       ],
-      name: 'Contact',
+      sObject: 'Contact',
     },
   },
   {
@@ -297,11 +312,11 @@ export default [
           ],
           subqueries: [],
           whereClauseGroups: [],
-          name: 'Contacts',
+          sObject: 'Contacts',
         },
       ],
       whereClauseGroups: [],
-      name: 'Account',
+      sObject: 'Account',
     },
   },
   {
@@ -327,11 +342,11 @@ export default [
           ],
           subqueries: [],
           whereClauseGroups: [],
-          name: 'Account.',
+          sObject: 'Account.',
         },
       ],
       whereClauseGroups: [],
-      name: 'Account',
+      sObject: 'Account',
     },
   },
   {
@@ -364,7 +379,7 @@ export default [
               },
             ],
           ],
-          name: 'Contacts',
+          sObject: 'Contacts',
         },
       ],
       whereClauseGroups: [
@@ -376,7 +391,7 @@ export default [
           },
         ],
       ],
-      name: 'Account',
+      sObject: 'Account',
     },
   },
   {
@@ -406,7 +421,7 @@ export default [
           },
         ],
       ],
-      name: 'Daughter__c',
+      sObject: 'Daughter__c',
     },
   },
   {
@@ -430,7 +445,7 @@ export default [
           ],
           subqueries: [],
           whereClauseGroups: [],
-          name: 'Line_Items__r',
+          sObject: 'Line_Items__r',
         },
       ],
       whereClauseGroups: [
@@ -442,7 +457,7 @@ export default [
           },
         ],
       ],
-      name: 'Merchandise__c',
+      sObject: 'Merchandise__c',
     },
   },
   {
@@ -468,7 +483,7 @@ export default [
           },
         ],
       ],
-      name: 'Task',
+      sObject: 'Task',
     },
   },
   {
@@ -498,7 +513,7 @@ export default [
           },
         ],
       ],
-      name: 'Task',
+      sObject: 'Task',
     },
   },
   {
@@ -516,7 +531,7 @@ export default [
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Event',
+      sObject: 'Event',
     },
   },
   {
@@ -527,7 +542,7 @@ export default [
       fields: [],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'Event',
+      sObject: 'Event',
     },
   },
   {
@@ -552,11 +567,11 @@ export default [
           ],
           subqueries: [],
           whereClauseGroups: [],
-          name: 'Notes',
+          sObject: 'Notes',
         },
       ],
       whereClauseGroups: [],
-      name: 'Account',
+      sObject: 'Account',
     },
   },
   {
@@ -598,11 +613,11 @@ export default [
           ],
           subqueries: [],
           whereClauseGroups: [],
-          name: 'OpportunityLineItems',
+          sObject: 'OpportunityLineItems',
         },
       ],
       whereClauseGroups: [],
-      name: 'Opportunity',
+      sObject: 'Opportunity',
     },
   },
   {
@@ -619,7 +634,7 @@ export default [
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'LoginHistory',
+      sObject: 'LoginHistory',
     },
   },
   {
@@ -633,9 +648,9 @@ export default [
         },
         {
           fn: {
-            fnType: 'aggregate',
+            text: 'COUNT(Id)',
             name: 'COUNT',
-            value: 'Id',
+            parameter: 'Id',
           },
         },
       ],
@@ -654,8 +669,10 @@ export default [
           },
         ],
       ],
-      name: 'LoginHistory',
-      groupBy: 'UserId',
+      sObject: 'LoginHistory',
+      groupBy: {
+        field: 'UserId',
+      },
     },
   },
   {
@@ -684,7 +701,190 @@ export default [
       ],
       subqueries: [],
       whereClauseGroups: [],
-      name: 'RecordType',
+      sObject: 'RecordType',
+    },
+  },
+  {
+    testCase: 27,
+    soql: 'SELECT CampaignId, AVG(Amount) avg FROM Opportunity GROUP BY CampaignId HAVING COUNT(Id, Name) > 1',
+    output: {
+      fields: [
+        {
+          text: 'CampaignId',
+        },
+        {
+          fn: {
+            text: 'AVG(Amount)',
+            name: 'avg',
+            parameter: 'Amount',
+            alias: 'avg',
+          },
+        },
+      ],
+      subqueries: [],
+      whereClauseGroups: [],
+      sObject: 'Opportunity',
+      groupBy: {
+        field: 'CampaignId',
+      },
+      having: {
+        fn: {
+          text: 'COUNT(Id,Name)',
+          name: 'COUNT',
+          parameter: ['Id', 'Name'],
+        },
+        operator: '>',
+        value: '1',
+      },
+    },
+  },
+  {
+    testCase: 28,
+    soql: 'SELECT LeadSource, COUNT(Name) cnt FROM Lead GROUP BY ROLLUP(LeadSource)',
+    output: {
+      fields: [
+        {
+          text: 'LeadSource',
+        },
+        {
+          fn: {
+            text: 'COUNT(Name)',
+            name: 'COUNT',
+            parameter: 'Name',
+            alias: 'cnt',
+          },
+        },
+      ],
+      subqueries: [],
+      whereClauseGroups: [],
+      sObject: 'Lead',
+      groupBy: {
+        field: 'LeadSource',
+        type: 'ROLLUP',
+      },
+    },
+  },
+  {
+    testCase: 29,
+    soql: 'SELECT Status, LeadSource, COUNT(Name) cnt FROM Lead GROUP BY ROLLUP(Status, LeadSource)',
+    output: {
+      fields: [
+        {
+          text: 'Status',
+        },
+        {
+          text: 'LeadSource',
+        },
+        {
+          fn: {
+            text: 'COUNT(Name)',
+            name: 'COUNT',
+            parameter: 'Name',
+            alias: 'cnt',
+          },
+        },
+      ],
+      subqueries: [],
+      whereClauseGroups: [],
+      sObject: 'Lead',
+      groupBy: {
+        field: ['Status', 'LeadSource'],
+        type: 'ROLLUP',
+      },
+    },
+  },
+  {
+    testCase: 30,
+    soql:
+      'SELECT Type, BillingCountry, GROUPING(Type) grpType, GROUPING(BillingCountry) grpCty, COUNT(id) accts FROM Account GROUP BY CUBE(Type, BillingCountry) ORDER BY GROUPING(Type), GROUPING(Id, BillingCountry), Name DESC NULLS FIRST, Id ASC NULLS LAST',
+    output: {
+      fields: [
+        {
+          text: 'Type',
+        },
+        {
+          text: 'BillingCountry',
+        },
+        {
+          fn: {
+            text: 'GROUPING(Type)',
+            name: 'GROUPING',
+            parameter: 'Type',
+            alias: 'grpType',
+          },
+        },
+        {
+          fn: {
+            text: 'GROUPING(BillingCountry)',
+            name: 'GROUPING',
+            parameter: 'BillingCountry',
+            alias: 'grpCty',
+          },
+        },
+        {
+          fn: {
+            text: 'COUNT(id)',
+            name: 'COUNT',
+            parameter: 'id',
+            alias: 'accts',
+          },
+        },
+      ],
+      subqueries: [],
+      whereClauseGroups: [],
+      sObject: 'Account',
+      groupBy: {
+        field: ['Type', 'BillingCountry'],
+        type: 'CUBE',
+      },
+      orderBy: [
+        {
+          fn: {
+            text: 'GROUPING(Type)',
+            name: 'GROUPING',
+            parameter: 'Type',
+          },
+        },
+        {
+          fn: {
+            text: 'GROUPING(Id,BillingCountry)',
+            name: 'GROUPING',
+            parameter: ['Id', 'BillingCountry'],
+          },
+        },
+        {
+          field: 'Name',
+          order: 'DESC',
+          nulls: 'LAST',
+        },
+        {
+          field: 'Id',
+          order: 'ASC',
+          nulls: 'LAST',
+        },
+      ],
+    },
+  },
+  {
+    testCase: 31,
+    soql: 'SELECT c.Name, c.Account.Name FROM Contact c',
+    output: {
+      fields: [
+        {
+          text: 'Name',
+          alias: 'c',
+        },
+        {
+          text: 'Account.Name',
+          relationshipFields: ['Account', 'Name'],
+          alias: 'c',
+        },
+      ],
+      subqueries: [],
+      whereClauseGroups: [],
+      sObject: 'Contact',
+      sObjectAlias: 'c',
     },
   },
 ];
+export default testCases;

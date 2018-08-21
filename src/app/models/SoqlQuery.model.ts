@@ -1,13 +1,14 @@
-export class SoqlQuery {
+export class SoqlQuery implements Query {
   fields: Field[];
-  subqueries: SoqlQuery[];
-  name: string;
+  subqueries: Query[];
+  sObject: string;
+  sObjectAlias?: string;
   whereClauseGroups: WhereClause[][];
   limit?: number;
   offset?: number;
-  groupBy: string;
-  having: any;
-  orderBy: OrderByClause;
+  groupBy?: GroupByClause;
+  having?: any;
+  orderBy?: OrderByClause | OrderByClause[];
 
   constructor() {
     this.fields = [];
@@ -23,20 +24,29 @@ export class SoqlQuery {
   }
 }
 
+export interface Query {
+  fields: Field[];
+  subqueries: Query[];
+  sObject: string;
+  sObjectAlias?: string;
+  whereClauseGroups: WhereClause[][];
+  limit?: number;
+  offset?: number;
+  groupBy?: GroupByClause;
+  having?: any;
+  orderBy?: OrderByClause | OrderByClause[];
+  addWhereCondition?: (condition: WhereClause, groupIdx: number) => void;
+}
+
 export interface SelectStatement {
   fields: Field[];
 }
 
 export interface Field {
   text?: string;
+  alias?: string;
   relationshipFields?: string[];
-  fn?: {
-    fnType: string;
-    name: string;
-    alias?: string;
-    value: string;
-    dataType: string;
-  };
+  fn?: FunctionExp;
   subqueryObjName?: string; // populated if subquery
 }
 
@@ -47,13 +57,26 @@ export interface WhereClause {
 }
 
 export interface OrderByClause {
-  field: string;
-  order: 'ASC' | 'DESC';
+  field?: string;
+  fn?: FunctionExp;
+  order?: 'ASC' | 'DESC';
   nulls?: 'FIRST' | 'LAST';
 }
 
+export interface GroupByClause {
+  field: string | string[];
+  type?: 'CUBE' | 'ROLLUP';
+}
+
 export interface HavingClause {
-  fn: string;
+  fn: FunctionExp;
   operator: string;
   value: string | number;
+}
+
+export interface FunctionExp {
+  text: string; // Count(Id)
+  name: string; // Count
+  alias?: string;
+  parameter?: string | string[];
 }
