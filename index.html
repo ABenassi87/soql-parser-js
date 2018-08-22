@@ -2,9 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>SOQL Parser JS</title>
+
+    <link type="text/css" rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+<div>
+    <header class="header">
+        <div class="container">
+            <h1>SOQL Parser JS</h1>
+        </div>
+    </header>
+    <div class="main-content">
+        <div class="container h-100 my-1">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                    <button type="button" class="btn btn-success" onclick="pQuery()">Parse Query</button>
+                </div>
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-danger">Clear Query</button>
+                </div>
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-info">Copy Query</button>
+                </div>
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-primary">Copy Tree</button>
+                </div>
+            </div>
+            <div class="row h-100">
+                <div class="col-12 col-md-6">
+                    <form class="h-100">
+                        <div class="form-group h-75">
+                            <label for="soqlQuery">SOQL Query:</label>
+                            <textarea class="form-control h-100" id="soqlQuery"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-12 col-md-6">
+                    <form class="h-100">
+                        <div class="form-group h-75">
+                            <label for="parserTree">Parser Tree:</label>
+                            <textarea class="form-control h-100" id="parserTree" disabled></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <h6>Copyright&copy; 2018 - Austin Turner</h6>
+        </div>
+
+        <script rel="script" src="node_modules/jquery/dist/jquery.min.js"></script>
+        <!--<script rel="script" src="../node_modules/popper.js/dist/popper.min.js"></script>-->
+        <script rel="script" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script rel="script" src="dist/soql-parser.js"></script>
+        <script rel="script" src="assets/js/main.js"></script>
+        <!--<script>
+          function pQuery() {
+            const soqlQuery = $('#soqlQuery');
+
+            const treeResult = parseQuery(soqlQuery.val());
+
+            $('#parserTree').val(treeResult);
+          }
+        </script>-->
+    </footer>
+</div>
 
 </body>
 </html>
