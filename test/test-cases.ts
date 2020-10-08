@@ -1917,6 +1917,28 @@ export const testCases: TestCase[] = [
       },
     },
   },
+  {
+    testCase: 103,
+    soql:
+      "SELECT Id FROM Account WHERE Foo IN ('1', '2', '3') OR Bar IN (1, 2, 3) OR Baz IN (101.00, 102.50) OR Bam IN ('FOO', null, undefined)",
+    output: {
+      fields: [{ type: 'Field', field: 'Id' }],
+      sObject: 'Account',
+      where: {
+        left: { field: 'Foo', operator: 'IN', value: ["'1'", "'2'", "'3'"], literalType: 'STRING' },
+        operator: 'OR',
+        right: {
+          left: { field: 'Bar', operator: 'IN', value: ['1', '2', '3'], literalType: 'INTEGER' },
+          operator: 'OR',
+          right: {
+            left: { field: 'Baz', operator: 'IN', value: ['101.00', '102.50'], literalType: 'DECIMAL' },
+            operator: 'OR',
+            right: { left: { field: 'Bam', operator: 'IN', value: ["'FOO'", 'null'], literalType: ['STRING', 'NULL'] } },
+          },
+        },
+      },
+    },
+  },
 ];
 
 export default testCases;

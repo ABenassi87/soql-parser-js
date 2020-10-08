@@ -1,7 +1,16 @@
 import { IToken } from 'chevrotain';
-import { FieldFunctionExpression, LiteralType, Query, Subquery, WhereClause, ValueQuery, Condition, FieldSubquery } from './api/api-models';
+import {
+  FieldFunctionExpression,
+  LiteralType,
+  Query,
+  Subquery,
+  WhereClause,
+  ValueQuery,
+  Condition,
+  FieldSubquery,
+  Operator,
+} from './api/api-models';
 import { ComposeField, ComposeFieldFunction, ComposeFieldRelationship, ComposeFieldSubquery, ComposeFieldTypeof } from './api/public-utils';
-import { isUndefined } from 'util';
 
 export function isToken(val: any): val is IToken[] | IToken {
   val = Array.isArray(val) ? val[0] : val;
@@ -116,47 +125,55 @@ export function isComposeFieldTypeof(input: any): input is ComposeFieldTypeof {
 }
 
 export function isConditionWithValueQuery(input: any): input is Condition & ValueQuery {
-  return isUndefined(input.valueQuery) ? false : true;
+  return input.valueQuery !== undefined;
 }
 
-export function getWhereValue(value: any | any[], literalType?: LiteralType | LiteralType[]): any {
-  if (isNil(literalType)) {
+export function getWhereValue(operator: Operator, value: any | any[], literalType?: LiteralType | LiteralType[]): any {
+  if (value === undefined) {
+    throw new Error('invalid value');
+  }
+
+  if (isNil(literalType) || isNil(operator)) {
     return value;
   }
-  if (Array.isArray(literalType) && Array.isArray(value)) {
-    return value.map((val, i) => {
-      return whereValueHelper(val, literalType[i] as LiteralType);
-    });
-  } else {
-    // This path should never hit, but on the off chance that literal type is an array and value is a string
-    // then the first literal type is considered
-    // TODO: BUG
-    if (Array.isArray(literalType)) {
-      literalType = literalType[0];
-    }
 
-    switch (literalType) {
-      case 'STRING': {
-        if (Array.isArray(value)) {
-          return value.map(val => ((val as string).startsWith("'") ? val : `'${val}'`));
-        } else {
-          return (value as string).startsWith("'") ? value : `'${value}'`;
+  switch (operator) {
+    case 'EXCLUDES':
+    case 'INCLUDES':
+    case 'IN':
+    case 'NOT IN':
+      if (!Array.isArray(value)) {
+        value = [value];
+      }
+
+      const isLiteralTypeArray = Array.isArray(literalType);
+
+      return (value as any[]).map((val, i) => {
+        if (!isLiteralTypeArray) {
+          return whereValueHelper(val, literalType as LiteralType);
         }
+        return whereValueHelper(val, literalType[i] as LiteralType);
+      });
+    default:
+      if (Array.isArray(literalType)) {
+        literalType = literalType[0];
       }
-      case 'APEX_BIND_VARIABLE': {
-        return `:${value}`;
-      }
-      default: {
-        return value;
-      }
-    }
+
+      return whereValueHelper(value, literalType);
   }
 }
 
 function whereValueHelper(value: any, literalType?: LiteralType) {
   switch (literalType) {
     case 'STRING': {
-      return (value as string).startsWith("'") ? value : `'${value}'`;
+      if (Array.isArray(value)) {
+        return value.map(val => ((val as string).startsWith("'") ? val : `'${val}'`));
+      } else {
+        return (value as string).startsWith("'") ? value : `'${value}'`;
+      }
+    }
+    case 'APEX_BIND_VARIABLE': {
+      return `:${value}`;
     }
     default: {
       return value;

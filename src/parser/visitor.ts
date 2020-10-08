@@ -824,6 +824,7 @@ const visitor = new SOQLVisitor();
 /**
  * Parse query and process results
  * @param soql
+ * @param options
  */
 export function parseQuery(soql: string, options?: ParseQueryConfig): Query {
   const query: Query = visitor.visit(parse(soql, options));
@@ -834,6 +835,7 @@ export function parseQuery(soql: string, options?: ParseQueryConfig): Query {
  * Lex and parse query (without walking parsed results)
  * to determine if query is valid
  * @param soql
+ * @param options
  */
 export function isQueryValid(soql: string, options?: ParseQueryConfig): boolean {
   try {

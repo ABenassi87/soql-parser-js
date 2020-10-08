@@ -310,7 +310,9 @@ export class Compose {
       if (utils.isConditionWithValueQuery(whereOrHaving.left) && whereOrHaving.left.valueQuery) {
         output += this.formatter.formatSubquery(this.parseQuery(whereOrHaving.left.valueQuery), 1, true);
       } else {
-        output += utils.getAsArrayStr(utils.getWhereValue(whereOrHaving.left.value, whereOrHaving.left.literalType));
+        output += utils.getAsArrayStr(
+          utils.getWhereValue(whereOrHaving.left.operator, whereOrHaving.left.value, whereOrHaving.left.literalType),
+        );
       }
 
       output +=
